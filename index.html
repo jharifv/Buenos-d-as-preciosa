@@ -197,7 +197,12 @@
 #enter-btn:hover {
   background: #d78ea4;
 }
-
+    /* --- Animación fade-out para la pantalla de bienvenida --- */
+#welcome-screen.fade-out {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  pointer-events: none;
+}
 
   </style>
 </head>
@@ -315,9 +320,6 @@
 // tryPlay();
 
 
-      // fallback: arrancar en primer click del usuario
-      document.body.addEventListener('click', tryPlay, { once: true });
-
       // control del botón
       if (playBtn) {
         playBtn.addEventListener('click', (e)=>{
@@ -338,13 +340,18 @@
   const bgMusic = document.getElementById('bg-music');
 
   enterBtn.addEventListener('click', () => {
-    bgMusic.play().then(() => {
+  bgMusic.play().then(() => {
+    // en lugar de ocultar directamente:
+    welcomeScreen.classList.add('fade-out');
+    setTimeout(() => {
       welcomeScreen.style.display = 'none';
       if (playBtn) playBtn.textContent = '⏸';
-    }).catch(err => {
-      console.error('Error al reproducir audio:', err);
-    });
+    }, 800);
+  }).catch(err => {
+    console.error('Error al reproducir audio:', err);
   });
+});
+
 </script>
 </body>
 </html>
