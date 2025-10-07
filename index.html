@@ -171,10 +171,41 @@
 
     /* ocultar reproductor nativo */
     audio{ display:none; }
+    /* Pantalla de bienvenida */
+#welcome-screen {
+  position: fixed;
+  inset: 0;
+  background: #f8f1f4; /* tono perla rosado */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+#enter-btn {
+  font-size: 1.4rem;
+  padding: 14px 32px;
+  background: #e4a6b7; /* palo rosa */
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: background 0.3s ease;
+}
+
+#enter-btn:hover {
+  background: #d78ea4;
+}
+
 
   </style>
 </head>
-<body>
+<body><!-- Pantalla de bienvenida -->
+<div id="welcome-screen">
+  <button id="enter-btn">Hola♡🌷</button>
+</div>
+
   <div id="stage" role="main" aria-label="Ramo de tulipanes interactivo">
     <div class="shimmer" aria-hidden="true"></div>
 
@@ -199,8 +230,7 @@
 
   <!-- audio en el DOM (usa el enlace de Drive convertido a descarga directa) -->
   <audio id="bg-music" loop>
-    <source src="https://docs.google.com/uc?export=download&id=1VKw9AfTziD_mw7kVuIvX4eybVG-e9daG" type="audio/mpeg">
-    Tu navegador no soporta audio HTML5.
+    <source src="audio.mp3" type="audio/mpeg">
   </audio>
 
   <script>
@@ -281,8 +311,9 @@
         });
       };
 
-      // intento inicial (puede ser bloqueado)
-      tryPlay();
+      // No hacemos intento inicial automático porque usamos pantalla de bienvenida
+// tryPlay();
+
 
       // fallback: arrancar en primer click del usuario
       document.body.addEventListener('click', tryPlay, { once: true });
@@ -301,5 +332,19 @@
       }
     });
   </script>
+  <script>
+  const welcomeScreen = document.getElementById('welcome-screen');
+  const enterBtn = document.getElementById('enter-btn');
+  const bgMusic = document.getElementById('bg-music');
+
+  enterBtn.addEventListener('click', () => {
+    bgMusic.play().then(() => {
+      welcomeScreen.style.display = 'none';
+      if (playBtn) playBtn.textContent = '⏸';
+    }).catch(err => {
+      console.error('Error al reproducir audio:', err);
+    });
+  });
+</script>
 </body>
 </html>
